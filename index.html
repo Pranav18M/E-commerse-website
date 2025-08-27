@@ -1,364 +1,422 @@
 <!DOCTYPE html>
 
 <html lang="en">
-<head>
-<meta charset="utf-8"/>
-<meta content="width=device-width, initial-scale=1" name="viewport"/>
-<title>ShopEase — Discover Deals Daily</title>
-<link href="https://fonts.googleapis.com" rel="preconnect"/>
-<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&amp;display=swap" rel="stylesheet"/>
-<link href="style.css" rel="stylesheet"/></head>
-<body>
-<!-- Loading Overlay -->
-<div class="loading-overlay" id="loadingOverlay">
-<div class="loading-spinner"></div>
-<p>Loading ShopEase...</p>
-</div>
-<!-- Navbar -->
-<header class="navbar">
-<div class="nav-container">
-<a class="logo" href="#">
-<span class="logo-icon">🛍️</span>
-        ShopEase
-      </a>
-<nav class="nav-menu">
-<ul class="nav-links" id="navLinks">
-<li><a class="nav-link active" href="#" onclick="showPage('home')">Home</a></li>
-<li><a class="nav-link" href="#" onclick="showPage('products')">Products</a></li>
-<li><a class="nav-link" href="#" onclick="showPage('wishlist')">
-            Wishlist 
-            <span class="heart-icon">❤️</span>
-<span class="badge wishlist-badge" id="wishlistCount">0</span>
-</a></li>
-<li><a class="nav-link" href="#" onclick="showPage('cart')">
-            Cart 
-            <span class="cart-icon">🛒</span>
-<span class="badge" id="cartCount">0</span>
-</a></li>
-</ul>
-</nav>
-<div class="nav-cta">
-<button aria-label="Toggle theme" class="icon-btn" id="darkModeToggle">
-<span class="theme-icon">🌙</span>
-</button>
-<button aria-label="Toggle Menu" class="hamburger" id="hamburger">
-<span></span>
-<span></span>
-<span></span>
-</button>
-</div>
-</div>
-</header>
-<!-- Main Content Container -->
-<main id="mainContent">
-<!-- HOME PAGE -->
-<div class="page active" id="homePage">
-<!-- Hero Section -->
-<section class="hero" id="hero">
-<div class="hero-bg"></div>
-<div class="hero-content">
-<h1 class="hero-title">
-<span class="title-line">Find it , Love it ,</span>
-<span class="title-line highlight">Buy it.</span>
-</h1>
-<p class="hero-subtitle">
-            Top brands. Fresh styles. Real savings. 
-            <span class="highlight-text">Up to 70% off</span>
-</p>
-<div class="hero-cta">
-<button class="btn btn-primary btn-large" onclick="showPage('products')">
-<span>Shop Now</span>
-<span class="btn-icon">→</span>
-</button>
-<button class="btn btn-ghost btn-large" onclick="document.getElementById('featured').scrollIntoView()">
-<span>Explore</span>
-</button>
-</div>
-<div></div>
-<center>
-<div class="scroll-indicator">
-<div class="scroll-arrow">↓</div>
-</div>
-</center>
-</section>
-<!-- Features Section -->
-<section class="features">
-<div class="container">
-<div class="features-grid">
-<div class="feature-card">
-<div class="feature-icon">🚚</div>
-<h3>Free Shipping</h3>
-<p>Free delivery on orders above ₹1500</p>
-</div>
-<div class="feature-card">
-<div class="feature-icon">🔄</div>
-<h3>Easy Returns</h3>
-<p>30-day hassle-free return policy</p>
-</div>
-<div class="feature-card">
-<div class="feature-icon">💳</div>
-<h3>Secure Payment</h3>
-<p>Multiple payment options available</p>
-</div>
-<div class="feature-card">
-<div class="feature-icon">⭐</div>
-<h3>Quality Products</h3>
-<p>Verified brands and authentic products</p>
-</div>
-</div>
-</div>
-</section>
-<!-- Featured Products -->
-<section class="products" id="featured">
-<div class="container">
-<div class="section-head">
-<div class="section-title">
-<h2>Featured Picks</h2>
-<p>Handpicked products just for you</p>
-</div>
-<button class="view-all-link" onclick="showPage('products')">
-              View all 
-              <span class="arrow">→</span>
-</button>
-</div>
-<div class="product-grid" id="featuredGrid">
-<!-- Products will be loaded here -->
-</div>
-</div>
-</section>
-<!-- Newsletter -->
-<section class="newsletter">
-<div class="container">
-<div class="newsletter-content">
-<div class="newsletter-text">
-<h3>Stay in the Loop</h3>
-<p>Get exclusive deals and updates delivered to your inbox</p>
-</div>
-<form class="newsletter-form" id="newsletterForm">
-<input placeholder="Enter your email" required="" type="email"/>
-<button class="btn btn-primary" type="submit">Subscribe</button>
-</form>
-</div>
-</div>
-</section>
-</div>
-<!-- PRODUCTS PAGE -->
-<div class="page" id="productsPage">
-<!-- Page Header -->
-<section class="page-header">
-<div class="container">
-<div class="page-header-content">
-<h1>All Products</h1>
-<p>Discover our complete collection of quality products</p>
-<div class="breadcrumb">
-<button onclick="showPage('home')">Home</button>
-<span>/</span>
-<span>Products</span>
-</div>
-</div>
-</div>
-</section>
-<!-- Filters -->
-<section class="filters-section">
-<div class="container">
-<div class="filters-container">
-<div class="search-container">
-<input class="search-input" id="searchInput" placeholder="Search products..." type="text"/>
-<span class="search-icon">🔍</span>
-</div>
-<div class="filter-group">
-<select class="filter-select" id="categoryFilter">
-<option value="">All Categories</option>
-<option value="electronics">Electronics</option>
-<option value="jewelery">Jewelry</option>
-<option value="men's clothing">Men's Clothing</option>
-<option value="women's clothing">Women's Clothing</option>
-</select>
-<select class="filter-select" id="sortBy">
-<option value="">Sort by</option>
-<option value="low-high">Price: Low to High</option>
-<option value="high-low">Price: High to Low</option>
-<option value="az">Name: A to Z</option>
-<option value="za">Name: Z to A</option>
-</select>
-<button class="btn btn-ghost btn-small" id="clearFilters">Clear Filters</button>
-</div>
-</div>
-</div>
-</section>
-<!-- Products Grid -->
-<section class="products-section">
-<div class="container">
-<!-- Loading State -->
-<div class="loading-state" id="productsLoading">
-<div class="loading-spinner"></div>
-<p>Loading amazing products...</p>
-</div>
-<!-- Products Grid -->
-<div class="product-grid" id="productList">
-<!-- Products will be loaded here -->
-</div>
-<!-- No Results -->
-<div class="no-results" id="noResults" style="display: none;">
-<div class="empty-state">
-<div class="empty-state-icon">🔍</div>
-<h3>No products found</h3>
-<p>Try adjusting your filters or search terms</p>
-<button class="btn btn-primary" id="resetSearch">Reset Search</button>
-</div>
-</div>
-</div>
-</section>
-</div>
-<!-- WISHLIST PAGE -->
-<div class="page" id="wishlistPage">
-<!-- Page Header -->
-<section class="page-header">
-<div class="container">
-<div class="page-header-content">
-<h1>Your Wishlist</h1>
-<p>Items you've saved for later</p>
-<div class="breadcrumb">
-<button onclick="showPage('home')">Home</button>
-<span>/</span>
-<span>Wishlist</span>
-</div>
-</div>
-</div>
-</section>
-<!-- Wishlist Content -->
-<section class="products">
-<div class="container">
-<div class="product-grid" id="wishlistGrid">
-<!-- Wishlist items will be loaded here -->
-</div>
-<!-- Empty Wishlist -->
-<div class="empty-state" id="emptyWishlist">
-<div class="empty-state-icon">💔</div>
-<h3>Your wishlist is empty</h3>
-<p>Start adding products you love to your wishlist</p>
-<button class="btn btn-primary" onclick="showPage('products')">
-<span>Browse Products</span>
-<span class="btn-icon">→</span>
-</button>
-</div>
-</div>
-</section>
-</div>
-<!-- CART PAGE -->
-<div class="page" id="cartPage">
-<!-- Page Header -->
-<section class="page-header">
-<div class="container">
-<div class="page-header-content">
-<h1>Shopping Cart</h1>
-<p>Review your selected items</p>
-<div class="breadcrumb">
-<button onclick="showPage('home')">Home</button>
-<span>/</span>
-<span>Cart</span>
-</div>
-</div>
-</div>
-</section>
-<!-- Cart Content -->
-<section class="cart-section">
-<div class="container">
-<div class="cart-layout">
-<!-- Cart Items -->
-<div class="cart-content">
-<!-- Cart Items List -->
-<div class="cart-list" id="cartList">
-<!-- Cart items will be loaded here -->
-</div>
-<!-- Empty Cart -->
-<div class="empty-state" id="emptyCart">
-<div class="empty-state-icon">🛒</div>
-<h3>Your cart is empty</h3>
-<p>Add some products to get started</p>
-<button class="btn btn-primary" onclick="showPage('products')">
-<span>Start Shopping</span>
-<span class="btn-icon">→</span>
-</button>
-</div>
-</div>
-<!-- Cart Summary -->
-<aside class="cart-sidebar">
-<div class="cart-summary">
-<h3>Order Summary</h3>
-<div class="summary-details">
-<div class="summary-row">
-<span>Subtotal</span>
-<span id="subtotal">₹0</span>
-</div>
-<div class="summary-row">
-<span>Shipping</span>
-<span id="shipping">₹0</span>
-</div>
-<div class="summary-divider"></div>
-<div class="summary-row total">
-<span>Total</span>
-<span id="grandTotal">₹0</span>
-</div>
-</div>
-<!-- Checkout Button -->
-<div class="checkout-actions">
-<button class="btn btn-primary btn-large btn-full" id="proceedToCheckout">
-<span>Proceed to Checkout</span>
-<span class="btn-icon">→</span>
-</button>
-</div>
-</div>
-</aside>
-</div>
-</div>
-</section>
-</div>
-</main>
-<!-- Footer -->
-<footer class="footer">
-<div class="container">
-<div class="footer-content">
-<div class="footer-section">
-<h4>ShopEase</h4>
-<p>Your trusted shopping companion for the best deals and quality products.</p>
-<div class="social-links">
-<a aria-label="Facebook" href="#">📘</a>
-<a aria-label="Twitter" href="#">🐦</a>
-<a aria-label="Instagram" href="#">📷</a>
-</div>
-</div>
-<div class="footer-section">
-<h4>Quick Links</h4>
-<ul>
-<li><button onclick="showPage('products')">Products</button></li>
-<li><button onclick="showPage('wishlist')">Wishlist</button></li>
-<li><button onclick="showPage('cart')">Cart</button></li>
-</ul>
-</div>
-<div class="footer-section">
-<h4>Support</h4>
-<ul>
-<li><a href="#">Help Center</a></li>
-<li><a href="#">Shipping Info</a></li>
-<li><a href="#">Returns</a></li>
-</ul>
-</div>
-<div class="footer-section">
-<h4>Contact</h4>
-<p>📧 mohnapranav@gmail.com</p>
-<p>📞 +91 9344810862</p>
-</div>
-</div>
-<div class="footer-bottom">
-<p>© Thankyou for shopping with Shop Ease-we look forward to serving you again</p>
-</div>
-</div>
-</footer>
-<!-- Toast Container -->
-<div class="toast-container" id="toastContainer"></div>
-<!-- Back to Top -->
-<button aria-label="Back to top" class="back-to-top" id="backToTop">↑</button>
-<script src="script.js"></script></body>
+  <head>
+    <meta charset="utf-8" />
+    <meta content="width=device-width, initial-scale=1" name="viewport" />
+    <title>ShopEase — Discover Deals Daily</title>
+    <link href="https://fonts.googleapis.com" rel="preconnect" />
+    <link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect" />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&amp;display=swap"
+      rel="stylesheet"
+    />
+    <link href="style.css" rel="stylesheet" />
+  </head>
+  <body>
+
+
+    <!-- Loading Overlay -->
+    <div class="loading-overlay" id="loadingOverlay">
+      <div class="loading-spinner"></div>
+      <p>Loading ShopEase...</p>
+    </div>
+
+    
+    <!-- Navbar -->
+    <header class="navbar">
+      <div class="nav-container">
+        <a class="logo" href="#">
+          <span class="logo-icon">🛍️</span>
+          ShopEase
+        </a>
+        <nav class="nav-menu">
+          <ul class="nav-links" id="navLinks">
+            <li>
+              <a class="nav-link active" href="#" onclick="showPage('home')"
+                >Home</a
+              >
+            </li>
+            <li>
+              <a class="nav-link" href="#" onclick="showPage('products')"
+                >Products</a
+              >
+            </li>
+            <li>
+              <a class="nav-link" href="#" onclick="showPage('wishlist')">
+                Wishlist
+                <span class="heart-icon">❤️</span>
+                <span class="badge wishlist-badge" id="wishlistCount">0</span>
+              </a>
+            </li>
+            <li>
+              <a class="nav-link" href="#" onclick="showPage('cart')">
+                Cart
+                <span class="cart-icon">🛒</span>
+                <span class="badge" id="cartCount">0</span>
+              </a>
+            </li>
+          </ul>
+        </nav>
+        <div class="nav-cta">
+          <button
+            aria-label="Toggle theme"
+            class="icon-btn"
+            id="darkModeToggle"
+          >
+            <span class="theme-icon">🌙</span>
+          </button>
+          <button aria-label="Toggle Menu" class="hamburger" id="hamburger">
+            <span></span>
+            <span></span>
+            <span></span>
+          </button>
+        </div>
+      </div>
+    </header>
+    <!-- Main Content Container -->
+    <main id="mainContent">
+      <!-- HOME PAGE -->
+      <div class="page active" id="homePage">
+        <!-- Hero Section -->
+        <section class="hero " id="hero">
+          
+          <div class="hero-content hero-bg">
+            <h1 class="hero-title">
+              <span class="title-line">Find it , Love it ,</span>
+              <span class="title-line highlight">Buy it.</span>
+            </h1>
+            <p class="hero-subtitle">
+              Top brands. Fresh styles. Real savings.
+              <span class="highlight-text">Up to 70% off</span>
+            </p>
+            <div class="hero-cta">
+              <button
+                class="btn btn-primary btn-large"
+                onclick="showPage('products')"
+              >
+                <span>Shop Now</span>
+                <span class="btn-icon">→</span>
+              </button>
+              <button
+                class="btn btn-ghost btn-large"
+                onclick="document.getElementById('featured').scrollIntoView()"
+              >
+                <span>Explore</span>
+              </button>
+            </div>
+            <div></div>
+
+            <div class="scroll-indicator">
+              <div class="scroll-arrow">↓</div>
+            </div>
+          </div>
+        </section>
+        <!-- Features Section -->
+        <section class="features">
+          <div class="container">
+            <div class="features-grid">
+              <div class="feature-card">
+                <div class="feature-icon">🚚</div>
+                <h3>Free Shipping</h3>
+                <p>Free delivery on orders above ₹1500</p>
+              </div>
+              <div class="feature-card">
+                <div class="feature-icon">🔄</div>
+                <h3>Easy Returns</h3>
+                <p>30-day hassle-free return policy</p>
+              </div>
+              <div class="feature-card">
+                <div class="feature-icon">💳</div>
+                <h3>Secure Payment</h3>
+                <p>Multiple payment options available</p>
+              </div>
+              <div class="feature-card">
+                <div class="feature-icon">⭐</div>
+                <h3>Quality Products</h3>
+                <p>Verified brands and authentic products</p>
+              </div>
+            </div>
+          </div>
+        </section>
+        <!-- Featured Products -->
+        <section class="products" id="featured">
+          <div class="container">
+            <div class="section-head">
+              <div class="section-title">
+                <h2>Featured Picks</h2>
+                <p>Handpicked products just for you</p>
+              </div>
+              <button class="view-all-link" onclick="showPage('products')">
+                View all
+                <span class="arrow">→</span>
+              </button>
+            </div>
+            <div class="product-grid" id="featuredGrid">
+              <!-- Products will be loaded here -->
+            </div>
+          </div>
+        </section>
+        <!-- Newsletter -->
+        <section class="newsletter">
+          <div class="container">
+            <div class="newsletter-content">
+              <div class="newsletter-text">
+                <h3>Stay in the Loop</h3>
+                <p>Get exclusive deals and updates delivered to your inbox</p>
+              </div>
+              <form class="newsletter-form" id="newsletterForm">
+                <input
+                  placeholder="Enter your email"
+                  required=""
+                  type="email"
+                />
+                <button class="btn btn-primary" type="submit">Subscribe</button>
+              </form>
+            </div>
+          </div>
+        </section>
+      </div>
+      <!-- PRODUCTS PAGE -->
+      <div class="page" id="productsPage">
+        <!-- Page Header -->
+        <section class="page-header">
+          <div class="container">
+            <div class="page-header-content">
+              <h1>All Products</h1>
+              <p>Discover our complete collection of quality products</p>
+              <div class="breadcrumb">
+                <button onclick="showPage('home')">Home</button>
+                <span>/</span>
+                <span>Products</span>
+              </div>
+            </div>
+          </div>
+        </section>
+        <!-- Filters -->
+        <section class="filters-section">
+          <div class="container">
+            <div class="filters-container">
+              <div class="search-container">
+                <input
+                  class="search-input"
+                  id="searchInput"
+                  placeholder="Search products..."
+                  type="text"
+                />
+                <span class="search-icon">🔍</span>
+              </div>
+              <div class="filter-group">
+                <select class="filter-select" id="categoryFilter">
+                  <option value="">All Categories</option>
+                  <option value="electronics">Electronics</option>
+                  <option value="jewelery">Jewelry</option>
+                  <option value="men's clothing">Men's Clothing</option>
+                  <option value="women's clothing">Women's Clothing</option>
+                </select>
+                <select class="filter-select" id="sortBy">
+                  <option value="">Sort by</option>
+                  <option value="low-high">Price: Low to High</option>
+                  <option value="high-low">Price: High to Low</option>
+                  <option value="az">Name: A to Z</option>
+                  <option value="za">Name: Z to A</option>
+                </select>
+                <button class="btn btn-ghost btn-small" id="clearFilters">
+                  Clear Filters
+                </button>
+              </div>
+            </div>
+          </div>
+        </section>
+        <!-- Products Grid -->
+        <section class="products-section">
+          <div class="container">
+            <!-- Loading State -->
+            <div class="loading-state" id="productsLoading">
+              <div class="loading-spinner"></div>
+              <p>Loading amazing products...</p>
+            </div>
+            <!-- Products Grid -->
+            <div class="product-grid" id="productList">
+              <!-- Products will be loaded here -->
+            </div>
+            <!-- No Results -->
+            <div class="no-results" id="noResults" style="display: none">
+              <div class="empty-state">
+                <div class="empty-state-icon">🔍</div>
+                <h3>No products found</h3>
+                <p>Try adjusting your filters or search terms</p>
+                <button class="btn btn-primary" id="resetSearch">
+                  Reset Search
+                </button>
+              </div>
+            </div>
+          </div>
+        </section>
+      </div>
+      <!-- WISHLIST PAGE -->
+      <div class="page" id="wishlistPage">
+        <!-- Page Header -->
+        <section class="page-header">
+          <div class="container">
+            <div class="page-header-content">
+              <h1>Your Wishlist</h1>
+              <p>Items you've saved for later</p>
+              <div class="breadcrumb">
+                <button onclick="showPage('home')">Home</button>
+                <span>/</span>
+                <span>Wishlist</span>
+              </div>
+            </div>
+          </div>
+        </section>
+        <!-- Wishlist Content -->
+        <section class="products">
+          <div class="container">
+            <div class="product-grid" id="wishlistGrid">
+              <!-- Wishlist items will be loaded here -->
+            </div>
+            <!-- Empty Wishlist -->
+            <div class="empty-state" id="emptyWishlist">
+              <div class="empty-state-icon">💔</div>
+              <h3>Your wishlist is empty</h3>
+              <p>Start adding products you love to your wishlist</p>
+              <button class="btn btn-primary" onclick="showPage('products')">
+                <span>Browse Products</span>
+                <span class="btn-icon">→</span>
+              </button>
+            </div>
+          </div>
+        </section>
+      </div>
+      <!-- CART PAGE -->
+      <div class="page" id="cartPage">
+        <!-- Page Header -->
+        <section class="page-header">
+          <div class="container">
+            <div class="page-header-content">
+              <h1>Shopping Cart</h1>
+              <p>Review your selected items</p>
+              <div class="breadcrumb">
+                <button onclick="showPage('home')">Home</button>
+                <span>/</span>
+                <span>Cart</span>
+              </div>
+            </div>
+          </div>
+        </section>
+        <!-- Cart Content -->
+        <section class="cart-section">
+          <div class="container">
+            <div class="cart-layout">
+              <!-- Cart Items -->
+              <div class="cart-content">
+                <!-- Cart Items List -->
+                <div class="cart-list" id="cartList">
+                  <!-- Cart items will be loaded here -->
+                </div>
+                <!-- Empty Cart -->
+                <div class="empty-state" id="emptyCart">
+                  <div class="empty-state-icon">🛒</div>
+                  <h3>Your cart is empty</h3>
+                  <p>Add some products to get started</p>
+                  <button
+                    class="btn btn-primary"
+                    onclick="showPage('products')"
+                  >
+                    <span>Start Shopping</span>
+                    <span class="btn-icon">→</span>
+                  </button>
+                </div>
+              </div>
+              <!-- Cart Summary -->
+              <aside class="cart-sidebar">
+                <div class="cart-summary">
+                  <h3>Order Summary</h3>
+                  <div class="summary-details">
+                    <div class="summary-row">
+                      <span>Subtotal</span>
+                      <span id="subtotal">₹0</span>
+                    </div>
+                    <div class="summary-row">
+                      <span>Shipping</span>
+                      <span id="shipping">₹0</span>
+                    </div>
+                    <div class="summary-divider"></div>
+                    <div class="summary-row total">
+                      <span>Total</span>
+                      <span id="grandTotal">₹0</span>
+                    </div>
+                  </div>
+                  <!-- Checkout Button -->
+                  <div class="checkout-actions">
+                    <button
+                      class="btn btn-primary btn-large btn-full"
+                      id="proceedToCheckout"
+                    >
+                      <span>Proceed to Checkout</span>
+                      <span class="btn-icon">→</span>
+                    </button>
+                  </div>
+                </div>
+              </aside>
+            </div>
+          </div>
+        </section>
+      </div>
+    </main>
+    <!-- Footer -->
+    <footer class="footer">
+      <div class="container">
+        <div class="footer-content">
+          <div class="footer-section">
+            <h4>ShopEase</h4>
+            <p>
+              Your trusted shopping companion for the best deals and quality
+              products.
+            </p>
+            <div class="social-links">
+              <a aria-label="Facebook" href="#">📘</a>
+              <a aria-label="Twitter" href="#">🐦</a>
+              <a aria-label="Instagram" href="#">📷</a>
+            </div>
+          </div>
+          <div class="footer-section">
+            <h4>Quick Links</h4>
+            <ul>
+              <li><button onclick="showPage('products')">Products</button></li>
+              <li><button onclick="showPage('wishlist')">Wishlist</button></li>
+              <li><button onclick="showPage('cart')">Cart</button></li>
+            </ul>
+          </div>
+          <div class="footer-section">
+            <h4>Support</h4>
+            <ul>
+              <li><a href="#">Help Center</a></li>
+              <li><a href="#">Shipping Info</a></li>
+              <li><a href="#">Returns</a></li>
+            </ul>
+          </div>
+          <div class="footer-section">
+            <h4>Contact</h4>
+            <p>📧 mohnapranav@gmail.com</p>
+            <p>📞 +91 9344810862</p>
+          </div>
+        </div>
+        <div class="footer-bottom">
+          <p>
+            © Thankyou for shopping with Shop Ease-we look forward to serving
+            you again
+          </p>
+        </div>
+      </div>
+    </footer>
+    <!-- Toast Container -->
+    <div class="toast-container" id="toastContainer"></div>
+    <!-- Back to Top -->
+    <button aria-label="Back to top" class="back-to-top" id="backToTop">
+      ↑
+    </button>
+    <script src="script.js"></script>
+  </body>
 </html>
