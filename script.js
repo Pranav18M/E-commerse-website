@@ -56,7 +56,7 @@ const showPage = (page) => {
   currentPage = page;
   
   // Load page-specific content
-  if (page === 'products' && allProducts.length === 0) {
+  if (page === 'products') {
     loadProducts();
   } else if (page === 'wishlist') {
     renderWishlist();
