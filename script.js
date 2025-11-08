@@ -1,6 +1,3 @@
-// ========== JAVASCRIPT CODE ==========
-
-// Global State
 let allProducts = [];
 let cart = JSON.parse(localStorage.getItem('shopease-cart') || '[]');
 let wishlist = JSON.parse(localStorage.getItem('shopease-wishlist') || '[]');
@@ -22,10 +19,8 @@ const saveToStorage = () => {
 
 const updateBadges = () => {
   const cartCount = cart.reduce((sum, item) => sum + item.quantity, 0);
-  const wishlistCount = wishlist.length;
-  
   document.getElementById('cartCount').textContent = cartCount;
-  document.getElementById('wishlistCount').textContent = wishlistCount;
+  document.getElementById('wishlistCount').textContent = wishlist.length;
 };
 
 // Toast Notifications
@@ -34,8 +29,7 @@ const showToast = (message, type = 'info') => {
   toast.className = `toast ${type}`;
   toast.textContent = message;
   
-  const container = document.getElementById('toastContainer');
-  container.appendChild(toast);
+  document.getElementById('toastContainer').appendChild(toast);
   
   setTimeout(() => {
     toast.style.animation = 'slideInRight 0.3s ease-out reverse';
@@ -46,8 +40,12 @@ const showToast = (message, type = 'info') => {
 // Page Navigation
 const showPage = (page) => {
   // Update navigation
-  document.querySelectorAll('.nav-link').forEach(link => link.classList.remove('active'));
-  document.querySelector(`.nav-link[onclick*="${page}"]`).classList.add('active');
+  document.querySelectorAll('.nav-link').forEach(link => {
+    link.classList.remove('active');
+  });
+  
+  const activeLink = document.querySelector(`.nav-link[onclick*="${page}"]`);
+  if (activeLink) activeLink.classList.add('active');
   
   // Update pages
   document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
@@ -74,10 +72,9 @@ const showPage = (page) => {
 // Product Functions
 const loadProducts = async () => {
   try {
-    // Fetch all products and store globally
     const response = await fetch("https://fakestoreapi.com/products");
     allProducts = await response.json();
-
+    
     document.getElementById('productsLoading').style.display = 'none';
     document.getElementById('productList').style.display = 'grid';
     
@@ -86,12 +83,7 @@ const loadProducts = async () => {
   } catch (error) {
     console.error('Error loading products:', error);
     showToast('Failed to load products', 'error');
-    // Fallback products if API fails
-    allProducts = fallbackProducts;
     document.getElementById('productsLoading').style.display = 'none';
-    document.getElementById('productList').style.display = 'grid';
-    renderProducts(allProducts);
-    setupFilters();
   }
 };
 
@@ -136,7 +128,7 @@ const loadFeaturedProducts = async () => {
   try {
     const response = await fetch('https://fakestoreapi.com/products?limit=6');
     const products = await response.json();
-
+    
     // Make featured items available to cart/wishlist lookups
     allProducts = [...allProducts, ...products];
     
@@ -267,22 +259,22 @@ const toggleWishlist = (productId) => {
   
   if (existingIndex > -1) {
     wishlist.splice(existingIndex, 1);
-    showToast(`${product.title} removed from wishlist`, 'info');
+    showToast(`Removed from wishlist`, 'info');
   } else {
     wishlist.push({
       id: product.id,
       title: product.title,
       price: product.price,
-      image: product.image
+      image: product.image,
+      rating: product.rating
     });
-    showToast(`${product.title} added to wishlist!`, 'success');
+    showToast(`Added to wishlist!`, 'success');
   }
   
   saveToStorage();
   
-  // Update wishlist button state (✅ use current state)
-  const buttons = document.querySelectorAll(`[onclick="toggleWishlist(${productId})"]`);
-  buttons.forEach(btn => {
+  // Update wishlist button state
+  document.querySelectorAll(`[onclick="toggleWishlist(${productId})"]`).forEach(btn => {
     btn.classList.toggle('active', isInWishlist(productId));
   });
   
@@ -314,6 +306,11 @@ const renderWishlist = () => {
       <div class="product-info">
         <h3 class="product-title">${item.title}</h3>
         <div class="product-price">${formatPrice(item.price)}</div>
+        <div class="product-rating">
+          <span>⭐ ${item.rating?.rate || 4.2}</span>
+          <span>•</span>
+          <span>${item.rating?.count || 100} reviews</span>
+        </div>
         <div class="product-actions">
           <button class="btn btn-ghost" onclick="moveToCart(${item.id})">
             Move to Cart
@@ -351,7 +348,8 @@ const setupFilters = () => {
     if (searchTerm) {
       filtered = filtered.filter(product => 
         product.title.toLowerCase().includes(searchTerm) ||
-        product.category.toLowerCase().includes(searchTerm)
+        product.category.toLowerCase().includes(searchTerm) ||
+        product.description?.toLowerCase().includes(searchTerm)
       );
     }
     
@@ -503,8 +501,8 @@ const init = () => {
     document.getElementById('loadingOverlay').classList.add('fade-out');
     setTimeout(() => {
       document.getElementById('loadingOverlay').remove();
-    }, 300);
-  }, 1000);
+    }, 500);
+  }, 1200);
   
   // Initialize features
   initDarkMode();
@@ -521,125 +519,18 @@ const init = () => {
   showPage('home');
 };
 
-// Add some sample products if API fails
-const fallbackProducts = [
-  {
-    id: 1,
-    title: "Premium Wireless Headphones",
-    price: 29.99,
-    image: "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='300' height='200' viewBox='0 0 300 200'%3E%3Crect width='300' height='200' fill='%23f0f0f0'/%3E%3Ctext x='150' y='100' text-anchor='middle' dominant-baseline='central' font-family='Arial, sans-serif' font-size='14' fill='%23666'%3EHeadphones%3C/text%3E%3C/svg%3E",
-    category: "electronics",
-    rating: { rate: 4.5, count: 150 }
-  },
-  {
-    id: 2,
-    title: "Classic Cotton T-Shirt",
-    price: 15.99,
-    image: "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='300' height='200' viewBox='0 0 300 200'%3E%3Crect width='300' height='200' fill='%23f0f0f0'/%3E%3Ctext x='150' y='100' text-anchor='middle' dominant-baseline='central' font-family='Arial, sans-serif' font-size='14' fill='%23666'%3ET-Shirt%3C/text%3E%3C/svg%3E",
-    category: "men's clothing",
-    rating: { rate: 4.2, count: 89 }
-  },
-  {
-    id: 3,
-    title: "Diamond Pendant Necklace",
-    price: 89.99,
-    image: "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='300' height='200' viewBox='0 0 300 200'%3E%3Crect width='300' height='200' fill='%23f0f0f0'/%3E%3Ctext x='150' y='100' text-anchor='middle' dominant-baseline='central' font-family='Arial, sans-serif' font-size='14' fill='%23666'%3ENecklace%3C/text%3E%3C/svg%3E",
-    category: "jewelery",
-    rating: { rate: 4.8, count: 67 }
-  },
-  {
-    id: 4,
-    title: "Elegant Summer Dress",
-    price: 45.99,
-    image: "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='300' height='200' viewBox='0 0 300 200'%3E%3Crect width='300' height='200' fill='%23f0f0f0'/%3E%3Ctext x='150' y='100' text-anchor='middle' dominant-baseline='central' font-family='Arial, sans-serif' font-size='14' fill='%23666'%3EDress%3C/text%3E%3C/svg%3E",
-    category: "women's clothing",
-    rating: { rate: 4.6, count: 124 }
-  },
-  {
-    id: 5,
-    title: "Smart Fitness Watch",
-    price: 199.99,
-    image: "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='300' height='200' viewBox='0 0 300 200'%3E%3Crect width='300' height='200' fill='%23f0f0f0'/%3E%3Ctext x='150' y='100' text-anchor='middle' dominant-baseline='central' font-family='Arial, sans-serif' font-size='14' fill='%23666'%3ESmartwatch%3C/text%3E%3C/svg%3E",
-    category: "electronics",
-    rating: { rate: 4.7, count: 203 }
-  },
-  {
-    id: 6,
-    title: "Gold Chain Bracelet",
-    price: 129.99,
-    image: "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='300' height='200' viewBox='0 0 300 200'%3E%3Crect width='300' height='200' fill='%23f0f0f0'/%3E%3Ctext x='150' y='100' text-anchor='middle' dominant-baseline='central' font-family='Arial, sans-serif' font-size='14' fill='%23666'%3EBracelet%3C/text%3E%3C/svg%3E",
-    category: "jewelery",
-    rating: { rate: 4.4, count: 78 }
-  }
-];
-
-// Fallback based on connectivity
-if (navigator.onLine) {
-  init();
-} else {
-  allProducts = fallbackProducts;
-  init();
-}
-
 // Handle online/offline status
 window.addEventListener('online', () => {
   showToast('Connected to internet', 'success');
-  if (allProducts.length <= 6) {
-    loadFeaturedProducts();
-  }
 });
 
 window.addEventListener('offline', () => {
   showToast('You are offline', 'warning');
 });
 
-// Add some CSS for page transitions
-document.head.insertAdjacentHTML('beforeend', `
-  <style>
-    .page {
-      display: none;
-      animation: fadeIn 0.3s ease-in-out;
-    }
-    
-    .page.active {
-      display: block;
-    }
-    
-    .loading-state {
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-      padding: 4rem 2rem;
-      text-align: center;
-    }
-    
-    .loading-state .loading-spinner {
-      margin-bottom: 1rem;
-    }
-    
-    .breadcrumb button {
-      background: none;
-      border: none;
-      color: inherit;
-      cursor: pointer;
-      text-decoration: underline;
-    }
-    
-    .footer-section button {
-      background: none;
-      border: none;
-      color: rgba(255, 255, 255, 0.8);
-      cursor: pointer;
-      text-align: left;
-      padding: 0;
-      text-decoration: none;
-      transition: var(--transition);
-    }
-    
-    .footer-section button:hover {
-      color: var(--text-inverse);
-      text-decoration: underline;
-    }
-  </style>
-`);
+// Start the application
+if (document.readyState === 'loading') {
+  document.addEventListener('DOMContentLoaded', init);
+} else {
+  init();
+}
